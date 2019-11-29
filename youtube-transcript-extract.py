@@ -127,26 +127,35 @@ def youtube_search(q, max_results=49,order="relevance", token=None, location=Non
 # In[4]:
 
 
-df=pd.DataFrame(youtube_search("Redmi Note 8 pro", max_results=49))
 import os
-os.chdir("<Mention your preferred Directory>/Youtube Automation Blog")
+os.chdir("C:/Users/antony.morais/Desktop/Amalraj/Youtube Automation Blog")
+df=pd.DataFrame(youtube_search("Redmi Note 8 pro", max_results=49))
+df1 = df[['title','videoId','viewCount','channelTitle','channelSubCount','commentCount','likeCount','dislikeCount','tags','favoriteCount','channelId','categoryId']]
+df1.columns = ['Title','VideoId','ViewCount','ChannelTitle','Channel SubCount','Comment Count','likeCount','dislikeCount','tags','favoriteCount','channelId','categoryId']
 
 
 # In[5]:
 
 
-df.to_csv("redmi_note_8_pro.csv", sep=',', encoding='utf-8')
+videoid = list(df1['VideoId'])
+x = YouTubeTranscriptApi.get_transcripts(videoid, continue_after_error=True,languages=['en'])
+vids_with_sub = x[0]
+vids_without_sub = x[1]
+# 36 Videos Don't have subs
+df2 = pd.DataFrame(list(vids_with_sub.keys()), columns=['videoId'])
 
 
 # In[6]:
 
 
-df1 = df[['title','videoId','viewCount','channelTitle','channelSubCount','commentCount','likeCount','dislikeCount','tags','favoriteCount','videoId','channelId','categoryId']]
-df1.columns = ['Title','videoId','viewCount','channelTitle','Channel_SubCount','commentCount','likeCount','dislikeCount','tags','favoriteCount','videoId','channelId','categoryId']
+result2= []
+for i in range(0,len(vids_with_sub)):
+    result1 = []
+    list_con = list(vids_with_sub.values())[i]
+    for i in list_con:
+        result1.append(i['text'])
+    result2.append(' '.join(result1))
 
-
-# In[ ]:
-
-
-
-
+df2['Transcripts'] = result2
+fin_df = pd.merge(df1, df2, how='left', left_on='VideoId', right_on='videoId')
+fin_df.to_csv("redmi_note_8_pro_final.csv", sep=',', encoding='utf-8')
