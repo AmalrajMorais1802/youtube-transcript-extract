@@ -4,7 +4,7 @@
 # In[66]:
 
 
-#Step 1 :
+#Step 2 :
 
 #!pip install apiclient
 #!pip install freeze
@@ -39,7 +39,7 @@ import re
 # In[67]:
 
 
-#Step 2 :
+#Step 3 :
 
 DEVELOPER_KEY = "AIzaSyBiTLl0Pis4g7RJCAEwjPobBaqrWW9rHdI"
 YOUTUBE_API_SERVICE_NAME = "youtube"
@@ -50,7 +50,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 # In[68]:
 
 
-#Step 3 :
+#Step 4 :
 
 def youtube_search(q, max_results=49,order="relevance", token=None, location=None, location_radius=None):
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
@@ -122,7 +122,7 @@ def youtube_search(q, max_results=49,order="relevance", token=None, location=Non
 # In[108]:
 
 
-#Step 4:
+#Step 5:
 
 import os
 os.chdir("C:/Users/antony.morais/Desktop/Amalraj/Youtube Automation Blog")
@@ -163,7 +163,7 @@ df1.columns = ['Title','VideoId','ViewCount','ChannelTitle','ChannelSubCount','C
 # In[113]:
 
 
-#Step 5:
+#Step 6:
 
 #Remove Tutorial Videos
 df1=df1[[not i for i in df1.Title.str.contains("how to|tutorial|getting started")]]
@@ -188,7 +188,7 @@ df_red.shape
 # In[115]:
 
 
-#Step 6:
+#Step 7:
 
 df_red.loc[:,"emv_video"] = df_red.apply(lambda row: int(row.ViewCount)*0.14+int(row.CommentCount)*8.20+int(row.likeCount)*0.72, axis=1)
 #df1.loc[:,"emv_subscriber"] = df1.apply(lambda row:int(row.ChannelSubCount)*16.54 , axis=1)
